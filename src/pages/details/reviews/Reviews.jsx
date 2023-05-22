@@ -46,7 +46,7 @@ const Reviews = ({ movieId }) => {
     });
 
     loadReviews();
-  }, []);
+  }, [movieId]);
 
   const sendReview = async () => {
     console.log({ text });
@@ -55,7 +55,7 @@ const Reviews = ({ movieId }) => {
         movieId,
         createdDate: Date.now(),
         text,
-        authorName: auth?.currentUser?.displayName,
+        authorEmail: auth?.currentUser?.email,
       });
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
@@ -80,9 +80,9 @@ const Reviews = ({ movieId }) => {
               >
                 <div className="flex items-center gap-2 mb-4">
                   <span className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-400 uppercase text-xl font-semibold text-white">
-                    {r.authorName.split(" ").map((name) => name[0])}
+                    {r.authorEmail[0]}
                   </span>
-                  <p className=" text-2xl text-white">{r.authorName}</p>
+                  <p className=" text-2xl text-white">{r.authorEmail}</p>
                 </div>
                 <p className=" mb-4 whitespace-pre-line text-white text-sm leadi">
                   {r.text}
