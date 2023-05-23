@@ -15,6 +15,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
 import { login, logout } from "./store/authSlice";
 import Favourites from "./pages/favourites/Favourites";
+import SearchResult from "./pages/searchResult/SearchResult";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ function App() {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/favourites" element={<Favourites />} />
             <Route path="/:mediaType/:id" element={<Details />} />
+            <Route path="/search/:query" element={<SearchResult />} />
           </Routes>
         </div>
 

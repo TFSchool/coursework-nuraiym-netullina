@@ -51,7 +51,7 @@ const SignIn = () => {
   return (
     <div>
       <ContentWrapper>
-        <div className="pt-32 flex flex-col justify-center items-center">
+        <div className="p-64 pt-32 flex flex-col justify-center items-center">
           <h2 className="mb-12 text-5xl text-white font-semibold">Войти</h2>
           <form className="w-96 mb-6">
             <div className="flex flex-col gap-2 mb-6">
@@ -85,7 +85,7 @@ const SignIn = () => {
             </div>
           </form>
 
-          <span className="text-white mb-6">Or continue with Google</span>
+          <span className="text-white mb-6">Продолжить через Google</span>
 
           <button
             onClick={googleSignIn}
@@ -93,14 +93,14 @@ const SignIn = () => {
           >
             <Icon width={24} icon="flat-color-icons:google" />
             <span className=" text-base font-medium text-blue-800">
-              Continue with Google
+              Продолжить через Google{" "}
             </span>
           </button>
 
           <div className="w-96 flex gap-1">
-            <p className="text-white">New to iMovie?</p>{" "}
+            <p className="text-white">Впервые в iMovie?</p>{" "}
             <Link to="/sign-up" className="text-white hover:text-purple-500">
-              Sign up
+              Зарегистрироваться
             </Link>
           </div>
           <button className=" bg-slate-700 mt-3 w-96 p-4" onClick={exit}>

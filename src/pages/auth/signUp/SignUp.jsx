@@ -73,13 +73,13 @@ const SignUp = () => {
         onClick={googleSignUp}
       >
         <Icon width={24} icon="flat-color-icons:google" />
-        Sign up with Google
+        Зарегистрироваться через Google
       </button>
 
-      <div className="w-96 flex gap-1">
-        <p className="text-white">Already have an account?</p>{" "}
+      <div className="mb-64 w-196 flex gap-1">
+        <p className="text-white">У вас есть аккаунт?</p>{" "}
         <Link to="/sign-in" className="text-white hover:text-purple-500">
-          Sign in
+          Войти
         </Link>
       </div>
     </div>
