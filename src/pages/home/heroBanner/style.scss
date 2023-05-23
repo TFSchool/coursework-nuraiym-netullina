@@ -77,6 +77,7 @@
         border: 0;
         border-radius: 16px 0 0 16px;
         padding: 0 15px;
+        color: black;
         font-size: 14px;
         @include md {
           width: calc(100% - 150px);
