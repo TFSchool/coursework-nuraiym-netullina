@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -9,10 +9,15 @@ import { auth, googleProvider } from "../../../config/firebase";
 import { Icon } from "@iconify/react";
 
 import "./style.scss";
+import ContentWrapper from "../../../components/contentWrapper/ContentWrapper";
+import { useDispatch } from "react-redux";
+import { login } from "../../../store/authSlice";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log({ user: auth.currentUser });
@@ -25,6 +30,7 @@ const SignIn = () => {
       await signInWithEmailAndPassword(auth, email, password);
       setEmail("");
       setPassword("");
+      navigateToHome();
     } catch (error) {
       console.error(error);
     }
@@ -32,6 +38,11 @@ const SignIn = () => {
 
   const googleSignIn = async () => {
     await signInWithPopup(auth, googleProvider);
+    navigateToHome();
+  };
+
+  const navigateToHome = () => {
+    navigate("/");
   };
 
   const exit = async () => {
@@ -39,56 +50,65 @@ const SignIn = () => {
   };
 
   return (
-    <div className="pt-20 flex flex-col justify-center items-center">
-      <h2 className="mb-8 text-5xl text-white">Войти</h2>
-      <form className="w-96 mb-6">
-        <div className="flex flex-col gap-2 mb-6">
-          <span className="text-white">Адрес электронной почты</span>
-          <input
-            className=" p-4 rounded-md bg-inherit outline-none border-neutral-500 border text-white"
-            type="email"
-            placeholder="email@index.html"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-          />
-        </div>
-        <div className="flex flex-col gap-2 mb-8">
-          <span className="text-white">Пароль</span>
-          <input
-            className=" p-4 rounded-md bg-inherit outline-none border-neutral-500 border text-white"
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-        </div>
-        <div>
+    <div>
+      <ContentWrapper>
+        <div className="pt-32 flex flex-col justify-center items-center">
+          <h2 className="mb-12 text-5xl text-white font-semibold">Войти</h2>
+          <form className="w-96 mb-6">
+            <div className="flex flex-col gap-2 mb-6">
+              <span className="text-white">Адрес электронной почты</span>
+              <input
+                className=" p-4 rounded-md bg-inherit outline-none border-neutral-500 border text-white"
+                type="email"
+                placeholder="email@index.html"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2 mb-8">
+              <span className="text-white">Пароль</span>
+              <input
+                className="p-4 rounded-md bg-inherit outline-none border-neutral-500 border text-white"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+              />
+            </div>
+            <div>
+              <button
+                className="w-full p-4 flex justify-center items-center bg-green-600 rounded-md text-white cursor-pointer"
+                onClick={signIn}
+                type="submit"
+              >
+                Войти
+              </button>
+            </div>
+          </form>
+
+          <span className="text-white mb-6">Or continue with Google</span>
+
           <button
-            className="w-full p-4 flex justify-center items-center bg-green-600 rounded-md text-white cursor-pointer"
-            onClick={signIn}
-            type="submit"
+            onClick={googleSignIn}
+            className="flex items-center justify-center gap-1 w-96 p-2 mb-6 bg-white rounded-md"
           >
-            Войти
+            <Icon width={24} icon="flat-color-icons:google" />
+            <span className=" text-base font-medium text-blue-800">
+              Continue with Google
+            </span>
+          </button>
+
+          <div className="w-96 flex gap-1">
+            <p className="text-white">New to iMovie?</p>{" "}
+            <Link to="/sign-up" className="text-white hover:text-purple-500">
+              Sign up
+            </Link>
+          </div>
+          <button className=" bg-slate-700 mt-3 w-96 p-4" onClick={exit}>
+            Выйти
           </button>
         </div>
-      </form>
-
-      <button
-        onClick={googleSignIn}
-        className="p-4 rounded-full border-white border"
-      >
-        <Icon width={32} icon="flat-color-icons:google" />
-      </button>
-
-      <div className="w-96 flex gap-1">
-        <p className="text-white">New to iMovie?</p>{" "}
-        <Link to="/sign-up" className="text-white hover:text-purple-500">
-          Sign up
-        </Link>
-      </div>
-      <button className=" bg-slate-700 mt-3 w-96 p-4" onClick={exit}>
-        Выйти
-      </button>
+      </ContentWrapper>
     </div>
   );
 };

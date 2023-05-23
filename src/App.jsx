@@ -11,17 +11,31 @@ import Home from "./pages/home/Home";
 import Details from "./pages/details/Details";
 import SignIn from "./pages/auth/signIn/SignIn";
 import SignUp from "./pages/auth/signUp/SignUp";
-
-import { googleProvider } from "./config/firebase.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase";
+import { login, logout } from "./store/authSlice";
 
 function App() {
   const dispatch = useDispatch();
   const { url } = useSelector((state) => state.home);
-  console.log(url);
 
   useEffect(() => {
     fetchApiConfig();
     genresCall();
+
+    onAuthStateChanged(auth, (user) => {
+      console.log("app.js", { user });
+      if (user) {
+        dispatch(
+          login({
+            email: user.email,
+            displayName: user.displayName,
+          })
+        );
+      } else {
+        dispatch(logout());
+      }
+    });
   }, []);
 
   const fetchApiConfig = () => {
@@ -58,14 +72,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/:mediaType/:id" element={<Details />} />
-      </Routes>
-      <Footer />
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex-1 flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/:mediaType/:id" element={<Details />} />
+          </Routes>
+        </div>
+
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }

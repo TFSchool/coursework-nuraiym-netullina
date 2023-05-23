@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../../config/firebase";
+import { Icon } from "@iconify/react";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -24,8 +25,8 @@ const SignUp = () => {
   };
 
   return (
-    <div className="pt-20 pb-20 flex flex-col justify-center items-center">
-      <h2 className="mb-8 text-5xl text-white">Регистрация</h2>
+    <div className="pt-32 flex flex-col justify-center items-center">
+      <h2 className="mb-8 text-5xl text-white font-semibold">Регистрация</h2>
       <form className="w-96 mb-6">
         <div className="flex flex-col gap-2 mb-6">
           <span className="text-white">Адрес электронной почты</span>
@@ -68,9 +69,10 @@ const SignUp = () => {
       </form>
 
       <button
-        className="w-96 bg-blue-500 p-4 cursor-pointer"
+        className="w-96 bg-blue-500 p-3 mb-4 cursor-pointer flex items-center justify-center text-white rounded-md"
         onClick={googleSignUp}
       >
+        <Icon width={24} icon="flat-color-icons:google" />
         Sign up with Google
       </button>
 

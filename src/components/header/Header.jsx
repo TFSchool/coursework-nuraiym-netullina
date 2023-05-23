@@ -8,6 +8,8 @@ import "./style.scss";
 
 import ContentWrapper from "../contentWrapper/ContentWrapper";
 import logo from "../../assets/movix-logo.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/authSlice";
 
 const Header = () => {
   const [show, setShow] = useState("top");
@@ -15,6 +17,8 @@ const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [query, setQuery] = useState("");
   const [showSearch, setShowSearch] = useState("");
+  const { isAuth } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -61,6 +65,10 @@ const Header = () => {
     setShowSearch(false);
   };
 
+  const logoutAccount = () => {
+    dispatch(logout());
+  };
+
   const navigationHandler = (type) => {
     if (type === "movie") {
       navigate("/explore/movie");
@@ -81,9 +89,15 @@ const Header = () => {
             <HiOutlineSearch onClick={openSearch} />
           </li>
           <li className="menuItem">
-            <Link className=" text-white" to="/sign-in">
-              Войти
-            </Link>
+            {isAuth ? (
+              <button className="text-white" onClick={logoutAccount}>
+                Выйти
+              </button>
+            ) : (
+              <Link className=" text-white" to="/sign-in">
+                Войти
+              </Link>
+            )}
             {/* <HiOutlineSearch onClick={openSearch} /> */}
           </li>
         </ul>
