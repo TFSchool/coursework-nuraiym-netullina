@@ -82,8 +82,11 @@ const Header = () => {
   return (
     <header className={`header ${mobileMenu ? "mobileView" : ""} ${show}`}>
       <ContentWrapper>
-        <div className="logo" onClick={() => navigate("/")}>
-          <img src={logo} alt="" />
+        <div
+          className="logo text-white text-2xl font-semibold"
+          onClick={() => navigate("/")}
+        >
+          Главная
         </div>
         <ul className="menuItems">
           <li className="menuItem">
@@ -95,7 +98,7 @@ const Header = () => {
               to="/favourites"
             >
               Избранные
-              <Icon width={24} icon="mdi:heart-outline" />
+              <Icon width={18} icon="mdi:heart-outline" />
             </Link>
           </li>
           <li className="menuItem">

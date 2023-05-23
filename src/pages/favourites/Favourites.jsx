@@ -20,7 +20,7 @@ const MovieList = ({ data, endpoint }) => {
   const { url } = useSelector((state) => state.home);
 
   return (
-    <div className="carouselItems">
+    <div className="carouselItems-favourites">
       {data?.map((item) => {
         const posterUrl = item.poster_path
           ? url.poster + item.poster_path
