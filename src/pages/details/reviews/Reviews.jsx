@@ -48,7 +48,6 @@ const Reviews = ({ movieId }) => {
   }, [movieId]);
 
   const sendReview = async () => {
-    console.log({ text });
     try {
       const docRef = await addDoc(collection(db, "reviews"), {
         movieId,
@@ -56,7 +55,6 @@ const Reviews = ({ movieId }) => {
         text,
         authorEmail: auth?.currentUser?.email,
       });
-      console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     } finally {

@@ -14,6 +14,7 @@ import SignUp from "./pages/auth/signUp/SignUp";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
 import { login, logout } from "./store/authSlice";
+import Favourites from "./pages/favourites/Favourites";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,7 +25,6 @@ function App() {
     genresCall();
 
     onAuthStateChanged(auth, (user) => {
-      console.log("app.js", { user });
       if (user) {
         dispatch(
           login({
@@ -40,8 +40,6 @@ function App() {
 
   const fetchApiConfig = () => {
     fetchDataFromApi("/configuration").then((res) => {
-      console.log(res);
-
       const url = {
         backdrop: res.images.secure_base_url + "original",
         poster: res.images.secure_base_url + "original",
@@ -62,7 +60,6 @@ function App() {
     });
 
     const data = await Promise.all(promises);
-    console.log(data);
     data.map(({ genres }) => {
       return genres.map((item) => (allGenres[item.id] = item));
     });
@@ -79,6 +76,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/favourites" element={<Favourites />} />
             <Route path="/:mediaType/:id" element={<Details />} />
           </Routes>
         </div>

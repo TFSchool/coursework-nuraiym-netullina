@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
@@ -13,15 +13,30 @@ import Img from "../../../components/lazyLoadImage/Img.jsx";
 import PosterFallback from "../../../assets/no-poster.png";
 import { PlayIcon } from "../Playbtn";
 import VideoPopup from "../../../components/videoPopup/VideoPopup";
+import { Icon } from "@iconify/react/dist/iconify";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  onSnapshot,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "../../../config/firebase";
 
 const DetailsBanner = ({ video, crew }) => {
   const [show, setShow] = useState(false);
   const [videoId, setVideoId] = useState(null);
+  const [isFavourite, setIsFavourite] = useState(null);
+  const [docId, setDocId] = useState(null);
 
   const { mediaType, id } = useParams();
   const { data, loading } = useFetch(`/${mediaType}/${id}`);
 
   const { url } = useSelector((state) => state.home);
+  const { user, isAuth } = useSelector((state) => state.auth);
 
   const _genres = data?.genres?.map((g) => g.id);
 
@@ -29,6 +44,50 @@ const DetailsBanner = ({ video, crew }) => {
   const writer = crew?.filter(
     (f) => f.job === "Screenplay" || f.job === "Story" || f.job === "Writer"
   );
+
+  useEffect(() => {
+    const loadFavourites = async () => {
+      const q = query(
+        collection(db, "favourites"),
+        where("movieId", "==", id),
+        where("authorEmail", "==", user.email)
+      );
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const resData = querySnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        if (resData[0]) {
+          setDocId(resData[0].id);
+          setIsFavourite(resData[0]?.isFavourite);
+        }
+      });
+    };
+    if (isAuth) {
+      loadFavourites();
+    }
+  }, [isAuth, id]);
+
+  const toggleIsFavourite = async () => {
+    setIsFavourite(!isFavourite);
+    try {
+      if (docId) {
+        await setDoc(doc(db, "favourites", docId), {
+          movieId: id,
+          authorEmail: user.email,
+          isFavourite: !isFavourite,
+        });
+      } else {
+        const docRef = await addDoc(collection(db, "favourites"), {
+          movieId: id,
+          authorEmail: user.email,
+          isFavourite: !isFavourite,
+        });
+      }
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  };
 
   const toHoursAndMinutes = (totalMinutes) => {
     const hours = Math.floor(totalMinutes / 60);
@@ -76,6 +135,19 @@ const DetailsBanner = ({ video, crew }) => {
                         <PlayIcon />
                         <span className="text">Трейлер</span>
                       </div>
+                      {isAuth && (
+                        <button onClick={toggleIsFavourite}>
+                          {isFavourite ? (
+                            <Icon
+                              width={32}
+                              icon="mdi:heart"
+                              className="text-pink-600"
+                            />
+                          ) : (
+                            <Icon width={32} icon="mdi:heart-outline" />
+                          )}
+                        </button>
+                      )}
                     </div>
 
                     <div className="overview">

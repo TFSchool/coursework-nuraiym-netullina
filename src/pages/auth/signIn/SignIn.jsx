@@ -23,7 +23,6 @@ const SignIn = () => {
     console.log({ user: auth.currentUser });
   }, []);
 
-  console.log(auth?.currentUser?.email);
   const signIn = async (e) => {
     e.preventDefault();
     try {

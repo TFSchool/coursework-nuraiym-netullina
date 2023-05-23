@@ -10,6 +10,7 @@ import ContentWrapper from "../contentWrapper/ContentWrapper";
 import logo from "../../assets/movix-logo.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/authSlice";
+import { Icon } from "@iconify/react/dist/iconify";
 
 const Header = () => {
   const [show, setShow] = useState("top");
@@ -89,12 +90,24 @@ const Header = () => {
             <HiOutlineSearch onClick={openSearch} />
           </li>
           <li className="menuItem">
+            <Link
+              className="flex items-center gap-1 text-white font-medium hover:text-pink-600 duration-75"
+              to="/favourites"
+            >
+              Избранные
+              <Icon width={24} icon="mdi:heart-outline" />
+            </Link>
+          </li>
+          <li className="menuItem">
             {isAuth ? (
-              <button className="text-white" onClick={logoutAccount}>
+              <button
+                className="text-white hover:text-pink-600"
+                onClick={logoutAccount}
+              >
                 Выйти
               </button>
             ) : (
-              <Link className=" text-white" to="/sign-in">
+              <Link className="text-white hover:text-pink-600" to="/sign-in">
                 Войти
               </Link>
             )}
